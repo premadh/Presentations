@@ -1,0 +1,5 @@
+\frametitle{Model Selection: \# of Components}
+\begin{figure}
+\includegraphics[scale=0.3]{figures/chr17dm850}
+\caption{10-fold Cross-Validation repeated 50 times and $J$ varied between 2-20. Example case: Chromosome: 17 resolution : 850. Similar approach to (J. Tikka et. al, 2007) and (J. Hollm\'en, 2007).}
+\end{figure}

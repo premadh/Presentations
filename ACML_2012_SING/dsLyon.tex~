@@ -1,0 +1,353 @@
+\documentclass[first=dgreen,second=purple,logo=redexc]{aaltoslides}
+%\documentclass{aaltoslides} % DEFAULT
+%\documentclass[first=purple,second=lgreen,logo=redque,normaltitle,nofoot]{aaltoslides} % SOME OPTION EXAMPLES
+
+\usepackage[latin9]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{amssymb,amsmath}
+\usepackage{url}
+\usepackage{lastpage}
+\usepackage{array}
+\usepackage{amsbsy}
+\usepackage{multirow}
+\usepackage[absolute,overlay]{textpos}
+
+
+\newcolumntype{x}[1]{%
+>{\centering\hspace{0pt}}p{#1}}%
+
+\title{ Fast Progressive Training of Mixture \\Models for Model Selection}
+
+\author[Prem Raj Adhikari]{ \underline{Prem Raj Adhikari}$^{1,2}$, Jaakko Hollm\'en$^{1,2}$ }
+\institute[ICS]{ \hspace{0.5mm} Parsimonious Modelling Research Group in \\
+$^1$Helsinki Institute for Information Technology (HIIT) \\
+$^{2}$Department of Information and Computer Science\\
+\hspace{1.5mm}Aalto University School of Science, Espoo, Finland \\
+%\vspace{1mm}
+%\hspace{1.5mm}\& ALGODAN Center of Excellence, Espoo, Finland \\
+%\hspace{1.5mm} \\ 
+\hspace{1.5mm}\{prem.adhikari,jaakko.hollmen\}@aalto.fi \\
+%\vspace{3mm}
+\hspace{1.5mm}Discovery Science (DS 2012) (October 29 to 31, 2012)
+}
+
+\aaltofootertext{Fast Progressive Training of Mixture Models} {Discovery Science (DS 2012), Oct. 29 to 31, 2012}{\insertframenumber/\inserttotalframenumber}
+
+%\date{November 2--4, 2011}
+\makeatletter
+
+\begin{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\aaltotitleframe
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \begin{frame}
+%   \frametitle{Outline}
+%   \tableofcontents%[pausesections]
+% 
+% \end{frame}
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Management Summary}
+\begin{itemize} \setlength{\itemsep}{6.5mm}
+  \item Mixture Modelling of 0-1 Data
+  \item Model Selection in Mixture Models
+  \item Approximate and Fast Training of Mixture Models
+  \item Experiments with Chromosomal Aberrations Data
+\end{itemize}
+\end{frame}
+
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 
+% \begin{frame}{Nomenclature of Chromosomal Areas}
+% 
+% \begin{columns}
+% \column{.6\textwidth}
+% \begin{itemize}
+%   \item International System for Human Cytogenetic Nomenclature (ISCN)
+%   \item Short arm locations are labeled p (petit), long arms q (queue)
+%   \item 17q21.32: Chromosome-17, Arm-q, Region-21, Band-3 and Subband-2
+%   \item Hierarchical, irregular naming scheme
+% \end{itemize}
+% \column{.4\textwidth} 
+% \begin{figure}
+% \includegraphics[height=5.7 cm]{figures/nchr17}
+% \end{figure}
+% \end{columns}
+% \end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{frame} {Mixture Modelling of 0-1 Data} 
+\begin{itemize}\setlength{\itemsep}{5.5mm}
+%    \item Cancer is a collection of heterogeneous diseases  
+%    \item Data is 0-1 data: presence or absence of chromosomal aberrations
+    \item Finite Mixture Modelling of the Multivariate Bernoulli Distribution \\  
+    \vspace{0.1cm}  
+\textcolor{blue} { $ P(x) = \sum _{j=1}^{J} \pi _{j} P(x|\theta _{j}) = \sum _{j=1}^{J} \pi _{j} \prod _{i=1}^{d} \theta_{ji}^{x_i}(1-\theta _{ji})^{1-x_{i}}$ } \\
+      \vspace{0.1cm}
+     \item EM algorithm to train the Mixture Models using BernoulliMix program package (Freely available at 
+     \href{http://users.ics.aalto.fi/jhollmen/BernoulliMix/}{http://users.ics.tkk.fi/{\raise.17ex\hbox{$\scriptstyle\mathtt{\sim}$}}jhollmen/BernoulliMix/}) 
+     \item \textcolor {blue} {\textbf{EM algorithm is deterministic with given initializations and a given dataset}}
+\end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Learning the Mixture Model}
+\begin{block}{Expectation Maximization Algorithm} 
+Number of mixture components,$J$, needs to be known apriori to learn the mixure model using the EM algorithm
+\end{block}
+\begin{itemize}
+ \item Large number of components \textcolor{red}{\textbf{overfits}} $\Rightarrow$ Complex Model
+ \item Small number of components \textcolor{red}{\textbf{underfits}} $\Rightarrow$ Simple Model
+\end{itemize}
+\begin{figure}
+\centering
+  \includegraphics[width=0.9\textwidth]{figures/fitting}
+\end{figure}
+
+\vspace{-4mm}
+
+\small \hspace{17mm} A common problem in model selection. %Overfitting, Underfitting and Just Correct Model
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \begin{frame}{Model Selection: myraid of methods}
+% \begin{itemize} \setlength{\itemsep}{4.5mm}
+%  \item $k$-fold Cross-Validation (CV)
+%  \item Minimum Description Length (MDL)
+%  \item Akaike Information Criterion (AIC)
+%  \item Bayesian Information Criterion (BIC)
+%  \item Stochastic and re-sampling methods
+%  \item Markov Chain Monte Carlo (MCMC)
+% \end{itemize}
+% \end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \begin{frame}{EM algorithm: the question?}
+% \begin{itemize} \setlength{\itemsep}{5.5mm}
+%  \item Iterations between E and M step produces monotonically increasing loglikelihood 
+%  \item EM algorithm is sensitive to the initializations
+%  \item Results may differ on the same data for different initializations
+%  \item EM algorithm can get stuck in local minima
+% 
+% 
+% \end{itemize}
+% \end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Fast Progressive Model Selection}
+\begin{itemize} %\setlength{\itemsep}{5.5mm}
+ \item Start with large number of mixture components, $J$
+ %\item Select best of $\boldsymbol{N}\approx 200$ models to possibly overcome local minima
+ \item Merge the similar mixture components $J\rightarrow J-1 $
+ %\item Train the mixture model in a $k-$fold cross-validation setting
+ \item Select the model that produces the best generalization ability
+\end{itemize}
+
+\vspace{-9mm}
+
+\begin{figure}
+\centering
+  \includegraphics[width=1.1\textwidth]{figures/merge}
+\end{figure}
+
+\vspace{-12mm}
+
+\small \hspace{24mm} Results in a series of models 
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Which Components to Merge??}
+
+\begin{figure}
+\centering
+  \includegraphics[width=0.99\textwidth]{figures/which}
+\end{figure}
+
+\vspace{-10mm}
+
+{\small \hspace{15mm} How to determine the similarity of components?}
+
+ \begin{itemize} %\setlength{\itemsep}{5.5mm}
+  \item Use approximate Kullback Leibler (KL) Divergence
+%  \item Merge the similar mixture components
+%  \item Train the mixture model in a $k-$fold cross-validation setting
+%  \item Select the model that produces best generalisation error
+ \end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Kullback-Leibler Divergence}
+ \begin{itemize} %\setlength{\itemsep}{5.5mm}
+  \item Non-symmetric measure of dissimilarity between two probability distributions
+  \item For probability distributions P and Q, symmetrized by averaging the KL divergence from P to Q and from Q to P
+ \end{itemize}
+ \small
+ \begin{eqnarray}
+\label{eq:symmc}
+\mathcal{D}_{KL}   =  \mathcal{D}_{KL}(P \mid \mid Q)+\mathcal{D}_{KL}(Q \mid \mid P) = \displaystyle\sum_{i} \left\{ \left(P(i)-Q(i)\right) \log \frac{P(i)}{Q(i)}\right\}. \nonumber
+\end{eqnarray}
+
+\begin{itemize} %\setlength{\itemsep}{5.5mm}
+  \item Between two mixture components, we can derive the symmetric KL divergence as
+\end{itemize}
+\small
+\begin{eqnarray}
+\label{eq:final2sum} 
+KL_{\theta\beta} & = & \displaystyle \sum_{i=1}^{2^{{d}}} \left[ \left\{ \displaystyle \prod _{k=1}^{{d}}  \left(\theta_k^{X_{ik}}(1-\theta_{k})^{(1-X_{ik})} \right)  -\displaystyle \prod _{k=1}^{{d}} \left(  \beta_{k}^{X_{ik}}(1-\beta_{k})^{(1-X_{ik})} \right) \right\} \nonumber \right. \\ 
+& & \left. \boldsymbol{\cdot} \; \displaystyle \sum_{k=1}^{{d}} \; log \; \frac{\theta_{k}^{X_{ik}} (1-\theta_{k})^{(1-X_{ik})}} { \beta_{k}^{X_{ik}}(1-\beta_{k})^{(1-X_{ik})}} \right]. \nonumber
+\end{eqnarray}
+
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Complexity of Kullback-Leibler Divergence}
+
+\vspace{-5mm}
+
+\begin{figure}
+\centering
+  \includegraphics[width=1.1\textwidth]{figures/klfirst}
+\end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Approximation of Kullback-Leibler Divergence}
+
+\vspace{-5mm}
+
+ \begin{figure}
+\centering
+  \includegraphics[width=1.1\textwidth]{figures/klsec}
+\end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Merge Criterion using Approximate KL Divergence}
+
+\vspace{-5mm}
+
+\begin{figure}
+\centering
+  \includegraphics[width=1.1\textwidth]{figures/klfin}
+\end{figure}
+\end{frame}
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Chromosomal Aberrations Patterns in Cancer}
+\begin{itemize} \setlength{\itemsep}{4mm}
+  \item Abnormality in the normal chromosomal content of a cell
+  \item Different cases of DNA copy number aberrations
+  \begin{itemize}\setlength{\itemsep}{2.5mm}
+    \item Deletion is the case when the copy number is less than two
+    \item Duplication is the case when the copy number is more than two
+    \item Amplification is the case when the copy number increases more than five
+  \end{itemize}
+  \item Why detect copy number aberrations?
+  \item DNA copy number aberrations are hallmarks of cancer
+\end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{DNA Copy Number Amplification Dataset}
+\begin{figure}[h!]
+  \centering
+  \includegraphics[height=0.8\textheight]{figures/data}
+   \label{Fig:converge}
+\end{figure}
+
+\vspace{-12mm}
+
+\tiny  Collected by bibliomics survey of 838 journal articles during 1992-2002 in (S. Myllykangas et. al. 2006 and 2008).  Sparse and spatially dependent 4590 $ \times $ 393 matrix. Figure only shows 5 samples in chromosome 21 (Dimension 8).
+\end {frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Retraining after Merging}
+\begin{figure}
+\centering
+  \includegraphics[width=0.8\textwidth]{figures/udea6dm393}
+\end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Model Selection : $k-$fold cross-validation}
+
+%\vspace{-5mm}
+
+\begin{figure}
+\centering
+  \includegraphics[width=0.8\textwidth]{figures/chr6dm400wt}
+\end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Why this model selection method?}
+
+\begin{itemize} \setlength{\itemsep}{4.5mm}
+ \item Merge similar components using mixture models
+ \item Fast approximation of KL divergence 
+ \item Faster convergence of EM algorithm when retraining from merged model 
+ %\item No hassle of repeating the experiments 
+ \item Algorithm makes only 1 pass through the K-fold Cross-validation setting
+ \item Compares similar models for different components
+ %\item No need to retrain the model after finding $J$
+ %\item However, may be stuck in local optima
+\end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Summary and Conclusions}
+
+\begin{itemize} \setlength{\itemsep}{5.5mm}
+ \item Model Selection in Mixture Models
+ \item A backward model selection algorithm by merging of mixture components
+ \item Fast approximation of KL divergence 
+ %\item Faster Model selection method
+ \item Experiments in cancer genomics data show speed-up factors of 1000 -10000
+\end{itemize}
+
+\end{frame}
+
+
+%%%% QUESTIONS FRAME BELOW %%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+\begin{frame}
+ \frametitle{Thanks, Questions, Comments and Feedback}
+ \begin{figure}[h!]
+ \centering
+ \includegraphics[width=0.9\textwidth]{figures/questions}
+ \end{figure}
+ 
+ \end{frame}
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}

@@ -1,0 +1,249 @@
+% rjwextra.sty -- Non-math LaTeX macros by Robert Whittaker
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{rjwextra}[2007/07/12 Rob's Extra LaTeX Customizations]
+
+\RequirePackage{color}
+
+% This package provides some extra non-maths-reltaed LaTeX commands
+% and customizations. Please feel free to use and/or adapt to your own
+% needs.
+%
+% Further information and other pacakges can be obtained from:
+%      http://www.maths.nott.ac.uk/personal/pmzrjw/latex/
+
+
+%------------------------------------------------------------------------
+% Package Options
+
+\newif\if@britdate
+\newif\if@seceqnum
+\newif\if@pdfmeta
+
+\DeclareOption{britdate}{\@britdatetrue}
+\DeclareOption{usdate}{\@britdatefalse}
+
+\DeclareOption{seceqnum}{\@seceqnumtrue}
+
+\DeclareOption{pdf}{\@pdfmetatrue}
+\DeclareOption{nopdf}{\@pdfmetafalse}
+
+\ExecuteOptions{britdate,nopdf}
+
+\ProcessOptions\relax %relax prevents look-ahead due to * form
+
+%------------------------------------------------------------------------
+% Use British date ordering with the \today command
+
+\if@britdate
+  \renewcommand*{\today}{\number\day\space
+   \ifcase\month\or
+   January\or February\or March\or April\or May\or June\or
+   July\or August\or September\or October\or November\or December\fi
+   \space\number\year}
+\fi
+
+%------------------------------------------------------------------------
+% Optional code to number equations by section with (n.m) format
+
+\if@seceqnum
+  \@addtoreset{equation}{section}
+  \renewcommand{\theequation}{\thesection.\arabic{equation}}
+\fi
+
+%------------------------------------------------------------------------
+% Nicer Figure / Table Captions
+
+\long\def\@makecaption#1#2{%
+  \vskip\abovecaptionskip
+  \sbox\@tempboxa{\textsc{#1}: \textsl{#2}}%
+  \ifdim \wd\@tempboxa >\hsize
+    \textsc{#1}: \textsl{#2}\par
+  \else
+    \global \@minipagefalse
+    \hb@xt@\hsize{\hfil\box\@tempboxa\hfil}%
+  \fi
+  \vskip\belowcaptionskip}
+
+%------------------------------------------------------------------------
+% Include a line's space between the text and footnotes, and
+% appropriate space between pairs of footnotes when using bouble-spacing
+
+\AtBeginDocument{
+  \setlength{\skip\footins}{\baselinestretch\baselineskip}
+  \setlength{\footnotesep}{\baselinestretch\footnotesep}
+}
+
+%Might be useful for something...
+%\makebox[0em][r]{$^{1}$}Text here \noindent
+%\makebox[0em][r]{$^{23}$}Text here
+
+%------------------------------------------------------------------------
+% \note Macro to generate margin notes
+
+% The option argument intended for author initials when working
+% in collaboration. \baselinestretch is set to 1 to avoid double
+% spacing leaking through. Group scope ensures that the main document
+% text isn't affected by any changes here.
+
+\setlength{\marginparwidth}{3cm}
+\newcommand{\note}[2][\null]{%
+  \marginpar{\renewcommand{\baselinestretch}{1}\vspace{-1em}\hrule\vspace{3pt}%
+  \footnotesize\raggedright\textsf{{#2}\ifx#1\null\else\\\hfill--- 
+  \emph{{#1}}\fi}\vspace{1.5em}}%
+}
+
+
+%------------------------------------------------------------------------
+% fquote Fancy Quotation environment
+
+% Use \sloppy to make right-margin easier?
+% Set picture units to be relative to font size (em)?
+% Use begingroup to rest units afterwards?
+
+\newcommand{\fq@author}{}
+\newcommand*{\fqsource}[1]{\gdef\fq@source{#1}}
+\definecolor{quotemark}{gray}{0.7}
+
+\newenvironment{fquote}[1][]{%
+\def\fq@author{#1}% Seem to need to use def for ifx @empty to work
+\let\fq@source\@empty
+  \vspace{1em}
+  \begin{list}{}{%
+      \setlength{\leftmargin}{0.2\textwidth}
+      \setlength{\rightmargin}{0.2\textwidth}
+    }
+    \item[]%
+    \begin{picture}(0,0)(0,0)
+      \put(-15,-5){\makebox(0,0){%
+	  \scalebox{5}{\textcolor{quotemark}{\bfseries``}}}%
+      }
+    \end{picture}\em\ignorespaces%
+}{%
+  \newline%
+  \makebox[0pt][l]{\hspace{0.6\textwidth}%
+  \begin{picture}(0,0)(0,0)
+    \put(15,10){\makebox(0,0){%
+	\scalebox{5}{\textcolor{quotemark}{\rm\bfseries''}}}%
+    }
+  \end{picture}}%
+  \ifx\fq@author\@empty\else\hfill\textsc{--- \fq@author}\fi
+  \ifx\fq@source\@empty\else\\\mbox{}\hfill\textsl{\small\fq@source}\fi
+  \end{list}
+  \ifx\fq@author\@empty\else\vspace{1em}\fi
+}
+
+%------------------------------------------------------------------------
+% Fakelabel uses code from the \label command to add arbitrary labels
+% to the aux file, which can then be read with the \ref{} mechanism
+
+\newcommand{\fakelabel}[3]{\@bsphack \protected@write \@auxout%
+ {}{\string \newlabel {#1}{{#2}{#3}}}\@esphack}
+
+% Arguments are label key, ref text, and page.
+
+%------------------------------------------------------------------------
+% Command to automate setting of title and author in PDF files
+% Experimental -- may not work at all!
+
+\if@pdfmeta
+
+\let\pdf@title\@empty
+\let\pdf@author\@empty
+\let\pdf@subject\@empty
+\let\pdf@keywords\@empty
+
+\newcommand{\pdftitle}[1]{\renewcommand{\pdf@title}{#1}}
+\newcommand{\pdfauthor}[1]{\renewcommand{\pdf@author}{#1}}
+\newcommand{\pdfsubject}[1]{\renewcommand{\pdf@subject}{#1}}
+\newcommand{\pdfkeywords}[1]{\renewcommand{\pdf@keywords}{#1}}
+
+\let\@author\@empty
+\let\@title\@empty
+
+\AtBeginDocument{%
+  \begingroup
+  \def\and{, }
+  \let\thanks\@gobble
+  \let\aff\@gobble
+
+  \ifx\pdf@title\@empty\let\pdf@title\@title\fi
+  \ifx\pdf@author\@empty\let\pdf@author\@author\fi
+
+%%  Title: \pdf@title \\
+%%  Author: \pdf@author
+
+  \special{! /pdfmark where
+             {pop} {userdict /pdfmark /cleartomark load put} ifelse
+             [ /Author (\pdf@author)
+               /Title (\pdf@title)
+	       /Subject (\pdf@subject)
+	       /Keywords (\pdf@keywords)
+               /DOCINFO pdfmark
+	     userdict /pdfmark /cleartomark load put
+  }
+  \endgroup
+}
+
+\fi
+
+%------------------------------------------------------------------------
+% Rather dodgy double label command for use with amsmath subequations
+% environment. Makes bad assumptions about numbering styles etc.
+% Does not work with eqnarray environment. Use with extreme caution.
+% NB \@ifempty is defined by amsmath and is used to allow use of empty
+% arguments if you don't want to set (all of) the labels to anything
+% specific. Otherwise you'll get multiple empty labels defined.
+
+\newcommand{\dlabel}[2]{
+  \newcommand{\dl@i}{\alph{equation}}
+  \@ifempty{#1}{}{\label{#1}}
+  \addtocounter{equation}{1}
+  \@ifempty{#2}{}{\fakelabel{#2}{\theparentequation\dl@i}{\thepage}}
+  \addtocounter{equation}{-1}
+  \renewcommand{\theequation}{\theparentequation{\dl@i,\stepcounter{equation}\dl@i}}
+}
+
+\newcommand{\tlabel}[3]{
+  \newcommand{\dl@i}{\alph{equation}}
+  \@ifempty{#1}{}{\label{#1}}
+  \stepcounter{equation}
+  \@ifempty{#2}{}{\fakelabel{#2}{\theparentequation\dl@i}{\thepage}}
+  \stepcounter{equation}
+  \@ifempty{#3}{}{\fakelabel{#3}{\theparentequation\dl@i}{\thepage}}
+  \addtocounter{equation}{-2}
+  \renewcommand{\theequation}{\theparentequation{\dl@i--\addtocounter{equation}{2}\dl@i}}
+}
+
+\newcommand{\qlabel}[4]{
+  \newcommand{\dl@i}{\alph{equation}}
+  \@ifempty{#1}{}{\label{#1}}
+  \stepcounter{equation}
+  \@ifempty{#2}{}{\fakelabel{#2}{\theparentequation\dl@i}{\thepage}}
+  \stepcounter{equation}
+  \@ifempty{#3}{}{\fakelabel{#3}{\theparentequation\dl@i}{\thepage}}
+  \stepcounter{equation}
+  \@ifempty{#4}{}{\fakelabel{#4}{\theparentequation\dl@i}{\thepage}}
+  \addtocounter{equation}{-3}
+  \renewcommand{\theequation}{\theparentequation{\dl@i--\addtocounter{equation}{3}\dl@i}}
+}
+
+\newcommand{\plabel}[5]{
+  \newcommand{\dl@i}{\alph{equation}}
+  \@ifempty{#1}{}{\label{#1}}
+  \stepcounter{equation}
+  \@ifempty{#2}{}{\fakelabel{#2}{\theparentequation\dl@i}{\thepage}}
+  \stepcounter{equation}
+  \@ifempty{#3}{}{\fakelabel{#3}{\theparentequation\dl@i}{\thepage}}
+  \stepcounter{equation}
+  \@ifempty{#4}{}{\fakelabel{#4}{\theparentequation\dl@i}{\thepage}}
+  \stepcounter{equation}
+  \@ifempty{#5}{}{\fakelabel{#5}{\theparentequation\dl@i}{\thepage}}
+  \addtocounter{equation}{-4}
+  \renewcommand{\theequation}{\theparentequation{\dl@i--\addtocounter{equation}{4}\dl@i}}
+}
+
+%------------------------------------------------------------------------
+
+\endinput
+

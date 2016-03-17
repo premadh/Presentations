@@ -1,0 +1,7 @@
+\beamer@endinputifotherversion {3.24pt}
+\beamer@sectionintoc {1}{Introduction to Chromosomal Aberration in Multiple Resolution}{3}{0}{1}
+\beamer@sectionintoc {2}{Sampling data between different resolutions}{9}{0}{2}
+\beamer@sectionintoc {3}{Comparison of Different Downsampling methods}{14}{0}{3}
+\beamer@sectionintoc {4}{Mixture Models of Amplification Patterns in Cancer}{16}{0}{4}
+\beamer@sectionintoc {5}{Maximal Frequent Itemset}{20}{0}{5}
+\beamer@sectionintoc {6}{Summary and Conclusions}{21}{0}{6}

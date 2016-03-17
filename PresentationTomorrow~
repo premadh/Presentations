@@ -1,0 +1,7 @@
+Title : Mixture resolution mixture models of 0-1 Data
+
+Abstract: 
+Multiresolution data arises when you measure the same phenomenon in different levels of details. Improvements in measurement technology gives rise to multiresolution data. The older generation technology measures coarse unit of the phenomenon and generates the data in coarse resolution (Smaller dimensionality). In contrast, newer generation technology measures finer units of the phenomenon and generates the data in fine resolution (Larger dimensionality). Currently, multiresolution data has received considerable research interest due to the practical usefulness in combining datasets in different resolutions into a single analysis. Most models and methods can only model a single data resolution, that is, vectors of the same dimensionality, at a time. In this presentation, I will discuss about the multiresolution data from the bioinformatics domain. I will also discuss some mixture modeling algorithms on multiresolution data. The results with multiresolution models show improvement in modeling performance with regards to the likelihood over single resolution mixture models.
+
+
+Biography: Prem Raj Adhikari is a doctoral student in Department of Information and Computer Science in Aalto University School of Science in Finland. He received his MSc (Tech. ) from Aalto University School of Science in 2011. 

@@ -1,0 +1,148 @@
+\documentclass[oneside]{rjwthesis}
+
+\usepackage{appendix}
+\usepackage{amssymb,natbib}
+
+%% import package -- enables you to have a separate folder for each
+%% chapter (and all its figures etc.) 
+%\usepackage{import}
+
+%% showkeys package -- useful for keeping track of the labels you've
+%% set for equations and sections etc.
+%\usepackage[notcite,notref,color]{showkeys}
+
+\title{The \texttt{rjwthesis} Class}
+\author{Robert J. Whittaker}
+\affiliation{My Affiliation}
+\address{Multiple line\\address goes here}
+\supervisor{My Supervisor}
+%\logo[3cm]{image-file}
+\tdesc{A template file for using the \texttt{rjwthesis} \LaTeX\ class.}
+
+
+%% Horizontal shift to allow for binding
+%\addtolength{\oddsidemargin}{0.65cm}
+%\addtolength{\evensidemargin}{0.65cm}
+
+
+\begin{document}
+
+%8888888888888888888888888888888888888888888888888888888888888888
+\frontmatter
+%8888888888888888888888888888888888888888888888888888888888888888
+
+%\maketitle
+
+%----------------------------------------------------------------
+
+\chapter{Preface}
+
+Stuff like the a preface, summary, declaration, and table of ceontens
+goes in the frontmatter section, and gets Roman numeral page
+numbering.
+
+%----------------------------------------------------------------
+
+% Automatic table of contents
+
+\setcounter{tocdepth}{1}
+\tableofcontents
+
+
+%8888888888888888888888888888888888888888888888888888888888888888
+%\mainmatter
+%8888888888888888888888888888888888888888888888888888888888888888
+
+\chapter{Introduction}
+
+The introductory chapter goes here.
+
+%8888888888888888888888888888888888888888888888888888888888888888
+
+\chapter[Chapter Short Title]%
+{Full Long Title for the First Proper Chapter}
+
+\label{ch:one}
+
+\begin{synopsis}
+A short abstract / summary of the content of the chapter can be
+included with the \texttt{synopsis} environment.
+\end{synopsis}
+
+
+\begin{fquote}Text and othe stuff for the chapter goes here. Repear as necessary for
+other chapters. \end{fquote}
+
+\section{A Section}
+\label{s:section}
+
+Use sectionning commands, and any other \LaTeX\ markup you know about.
+
+\subsection{A Subsection with an Equation}
+
+\begin{equation}
+\mathrm{e}^{\mathrm{i}\pi} + 1 = 0 \, .
+\end{equation}
+
+
+\section{Another Section}
+ This is the section after \S\ref{s:section}.
+
+
+
+\begin{subappendices}
+
+\section{Within-chapter Appendicies}
+
+The \texttt{appendix} package provides a \texttt{subappendices}
+environment. This is customised slightly by the class to give a nicer
+separator that matches the chapter headings.
+
+\section{More than one Sub-Appendix}
+
+\ldots can be added in the obvious way.
+
+\end{subappendices}
+
+
+
+
+
+%8888888888888888888888888888888888888888888888888888888888888888
+
+\chapter[Second Chapter]%
+{Full title for the Secong Chapter of the Thesis}
+
+\label{ch:two}
+
+This is the second \emph{main} chapter, the one following
+Chapter~\ref{ch:one}.
+
+%8888888888888888888888888888888888888888888888888888888888888888
+
+
+%8888888888888888888888888888888888888888888888888888888888888888
+\backmatter
+%8888888888888888888888888888888888888888888888888888888888888888
+
+\chapter{Acknowledgements}
+\label{ch:ack}
+
+The backmatter section contians things like acknowledgements and the
+bibliography.
+
+%8888888888888888888888888888888888888888888888888888888888888888
+
+\newcommand{\bibpreamble}{Define the \texttt{\textbackslash
+bibpreamble} command to add a paragraph of text etc.\ between the
+bibliography heading and the list of references. Bibliography commands
+are just like normal LaTeX. Choose a style, use \texttt{\textbackslash
+cite} in the body, and run Bib\TeX\ on your document.}
+
+\bibliographystyle{jfm}
+\bibliography{abbr,papers,books}
+
+%8888888888888888888888888888888888888888888888888888888888888888
+
+
+\end{document}
